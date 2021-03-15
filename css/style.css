@@ -46,7 +46,7 @@ main aside{
     margin-bottom: 20px;
 }
 footer{
-position: sticky;
+
     width: 100%;
 }
 main aside ul{
@@ -65,7 +65,7 @@ main aside ul li{
 }
 main{
     width: 100%;
-    height: 750px;
+    height: 1000px;
     margin: 1px;
 }
 footer {
@@ -82,6 +82,14 @@ footer h1{
     text-align: center;
     padding: 50px;
 
+}
+
+main article{
+    float: right;
+    margin: 10px 300px;
+    text-align: center;
+    width: 750px;
+    height: 400px;
 }
 
 
