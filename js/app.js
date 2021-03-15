@@ -83,10 +83,11 @@ function clickHolder(event) {
 
 }
 
-let a=0;
+
 function reachNumberOfRounds(){
 
-  if(numberOfSelect===numberOfRounds && a===0){
+  if(numberOfSelect===numberOfRounds){
+    img.removeEventListener('click', clickHolder);
     let section=document.getElementById('img');
     let button=document.createElement('button');
     section.appendChild(button);
