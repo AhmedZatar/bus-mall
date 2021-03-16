@@ -1,37 +1,45 @@
 'use strict';
-const product = ['bag.jpg','banana.jpg','bathroom.jpg','boots.jpg','breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg','dog-duck.jpg','dragon.jpg','pen.jpg','pet-sweep.jpg','scissors.jpg','shark.jpg','sweep.png','tauntaun.jpg','unicorn.jpg','usb.gif','water-can.jpg','wine-glass.jpg'];
-const productName = ['bag','banana','bathroom','boots','breakfast','bubblegum','chair','cthulhu','dog-duck','dragon','pen','pet-sweep','scissors','shark','sweep','tauntaun','unicorn','usb','water-can','wine-glass'];
+const product = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png', 'tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
+const productName = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'];
 
 const img = document.getElementById('img');
 const leftImg = document.getElementById('leftImg');
 const centerImg = document.getElementById('centerImg');
 const rightImg = document.getElementById('rightImg');
 
-function BusProduct(productName){
+function BusProduct(productName) {
 
-  this.productName=productName;
-  this.path=`./img/${productName}`;
+  this.productName = productName;
+  this.path = `./img/${productName}`;
   this.timeSelected = 0;
   this.timeShowen = 0;
 
   BusProduct.all.push(this);
-
 }
 
+
 BusProduct.all = [];
-for(let i=0;i<product.length;i++){
+function retrieve() {
+  if (localStorage.length > 0) {
+    BusProduct.all = JSON.parse(localStorage.getItem('dataStorage'));
+    randomImg();
+  }
+}
+
+for (let i = 0; i < product.length; i++) {
+
   new BusProduct(product[i]);
 }
 
 function randomNumber(min, max) {
-  let a= Math.floor(Math.random() * (max - min + 1)) + min;
-  while(a === previousImg[0] || a === previousImg[1] || a === previousImg[2]){
-    a= Math.floor(Math.random() * (max - min + 1)) + min;
+  let a = Math.floor(Math.random() * (max - min + 1)) + min;
+  while (a === previousImg[0] || a === previousImg[1] || a === previousImg[2]) {
+    a = Math.floor(Math.random() * (max - min + 1)) + min;
   }
   return a;
 }
 
-let previousImg=[];
+let previousImg = [];
 
 function randomImg() {
   let leftPic = randomNumber(0, BusProduct.all.length - 1);
@@ -46,7 +54,7 @@ function randomImg() {
 
   do {
     centerPic = randomNumber(0, BusProduct.all.length - 1);
-  }while ( centerPic === leftPic);
+  } while (centerPic === leftPic);
 
   centerImg.src = BusProduct.all[centerPic].path;
   centerImg.title = BusProduct.all[centerPic].productName;
@@ -54,10 +62,10 @@ function randomImg() {
   BusProduct.all[centerPic].timeShowen++;
 
 
-  do{
+  do {
     rightPic = randomNumber(0, BusProduct.all.length - 1);
 
-  }while (rightPic === leftPic || rightPic === centerPic );
+  } while (rightPic === leftPic || rightPic === centerPic);
   rightImg.src = BusProduct.all[rightPic].path;
   rightImg.title = BusProduct.all[rightPic].productName;
   rightImg.alt = BusProduct.all[rightPic].productName;
@@ -65,29 +73,31 @@ function randomImg() {
 
   console.table(BusProduct.all);
 
-  previousImg[0]=leftPic;
-  previousImg[1]=centerPic;
-  previousImg[2]=rightPic;
+  previousImg[0] = leftPic;
+  previousImg[1] = centerPic;
+  previousImg[2] = rightPic;
+
+
 }
 randomImg();
 
 
 img.addEventListener('click', clickHolder);
 
-let numberOfSelect=0;
-let numberOfRounds=25;
+let numberOfSelect = 0;
+let numberOfRounds = 25;
 function clickHolder(event) {
 
-  if (numberOfSelect<numberOfRounds && event.target.id==='leftImg' || numberOfSelect<numberOfRounds && event.target.id==='centerImg' || numberOfSelect<numberOfRounds && event.target.id==='rightImg'){
-    for (let i = 0; i < BusProduct.all.length; i++){
-      if(BusProduct.all[i].productName === event.target.title){
+  if (numberOfSelect < numberOfRounds && event.target.id === 'leftImg' || numberOfSelect < numberOfRounds && event.target.id === 'centerImg' || numberOfSelect < numberOfRounds && event.target.id === 'rightImg') {
+    for (let i = 0; i < BusProduct.all.length; i++) {
+      if (BusProduct.all[i].productName === event.target.title) {
         BusProduct.all[i].timeSelected++;
         numberOfSelect++;
         console.log(numberOfSelect);
       }
     }
     randomImg();
-  }else if(numberOfSelect<numberOfRounds){
+  } else if (numberOfSelect < numberOfRounds) {
     alert('Please Select Product');
   }
   reachNumberOfRounds();
@@ -95,36 +105,38 @@ function clickHolder(event) {
 }
 
 
-function reachNumberOfRounds(){
+function reachNumberOfRounds() {
 
-  if(numberOfSelect===numberOfRounds){
+  if (numberOfSelect === numberOfRounds) {
     img.removeEventListener('click', clickHolder);
-    let section=document.getElementById('img');
-    let button=document.createElement('button');
+    let section = document.getElementById('img');
+    let button = document.createElement('button');
     section.appendChild(button);
-    button.innerText='View Results';
-    button.id='show';
+    button.innerText = 'View Results';
+    button.id = 'show';
     const show = document.getElementById('show');
     show.addEventListener('click', clickHolder2);
+    localStorage.setItem('dataStorage', JSON.stringify(BusProduct.all));
+
 
   }
 }
 
 
-function clickHolder2(){
+function clickHolder2() {
 
-  let aside=document.getElementById('aside');
-  let unorderList=document.createElement('ul');
+  let aside = document.getElementById('aside');
+  let unorderList = document.createElement('ul');
   aside.appendChild(unorderList);
-  unorderList.innerText='Results';
-  for(let i=0;i<product.length;i++){
-    let list= document.createElement('li');
+  unorderList.innerText = 'Results';
+  for (let i = 0; i < product.length; i++) {
+    let list = document.createElement('li');
     unorderList.appendChild(list);
-    list.innerText=productName[i]+' had Selected '+BusProduct.all[i].timeSelected+' times and shown '+BusProduct.all[i].timeShowen+' times';
+    list.innerText = productName[i] + ' had Selected ' + BusProduct.all[i].timeSelected + ' times and shown ' + BusProduct.all[i].timeShowen + ' times';
 
   }
 
-  let section=document.getElementById('img');
+  let section = document.getElementById('img');
   section.removeChild(section.childNodes[9]);
   chartFunction();
 
@@ -132,12 +144,12 @@ function clickHolder2(){
 
 
 
-function chartFunction(){
+function chartFunction() {
   let ctx = document.getElementById('myChart').getContext('2d');
-  let getProductName=[];
-  let getTimeSelected=[];
-  let getTimeShowen=[];
-  for(let i=0;i<BusProduct.all.length;i++){
+  let getProductName = [];
+  let getTimeSelected = [];
+  let getTimeShowen = [];
+  for (let i = 0; i < BusProduct.all.length; i++) {
     getProductName.push(productName[i]);
     getTimeSelected.push(BusProduct.all[i].timeSelected);
     getTimeShowen.push(BusProduct.all[i].timeShowen);
@@ -175,9 +187,6 @@ function chartFunction(){
     }
   });
 }
-
-
-
-
+retrieve();
 
 
