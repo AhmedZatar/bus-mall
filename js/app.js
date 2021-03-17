@@ -17,10 +17,9 @@ function BusProduct(productName) {
   BusProduct.all.push(this);
 }
 
-
 BusProduct.all = [];
 function retrieve() {
-  if (localStorage.length > 0) {
+  if (localStorage) {
     BusProduct.all = JSON.parse(localStorage.getItem('dataStorage'));
     randomImg();
   }
