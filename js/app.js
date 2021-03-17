@@ -24,6 +24,7 @@ function retrieve() {
   if (data) {
     BusProduct.all = JSON.parse(localStorage.getItem('dataStorage'));
     randomImg();
+    clickHolder2();
   } else {
     randomImg();
   }
@@ -98,8 +99,8 @@ function clickHolder(event) {
         numberOfSelect++;
         console.log(numberOfSelect);
       }
-    }
-    randomImg();
+    } if (numberOfSelect < numberOfRounds)
+      randomImg();
   } else if (numberOfSelect < numberOfRounds) {
     alert('Please Select Product');
   }
@@ -128,7 +129,9 @@ function reachNumberOfRounds() {
 
 function clickHolder2() {
 
+
   let aside = document.getElementById('aside');
+  aside.innerHTML = '';
   let unorderList = document.createElement('ul');
   aside.appendChild(unorderList);
   unorderList.innerText = 'Results';
@@ -139,8 +142,6 @@ function clickHolder2() {
 
   }
 
-  let section = document.getElementById('img');
-  section.removeChild(section.childNodes[9]);
   chartFunction();
 
 }
@@ -148,6 +149,8 @@ function clickHolder2() {
 
 
 function chartFunction() {
+  const chartElement = document.getElementById('article');
+  chartElement.innerHTML='<canvas id="myChart"></canvas>';
   let ctx = document.getElementById('myChart').getContext('2d');
   let getProductName = [];
   let getTimeSelected = [];
